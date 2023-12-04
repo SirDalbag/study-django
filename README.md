@@ -1,1 +1,1 @@
-# study-django
+# study django
