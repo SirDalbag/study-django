@@ -15,11 +15,11 @@ async def index(request: Request):
         "index.html",
         {
             "request": request,
-            "weather": Weather.get_weather(),
-            "currency_rate": CurrencyRate.get_currency_rate(
+            "weather": await Weather.get_weather(),
+            "currency_rate": await CurrencyRate.get_currency_rate(
                 filter=("USD", "EUR", "RUB")
             ),
-            "currency_rate_api": CurrencyRateAPI.get_currency_rate(),
+            "currency_rate_api": await CurrencyRateAPI.get_currency_rate(),
         },
     )
 
