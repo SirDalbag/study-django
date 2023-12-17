@@ -9,6 +9,7 @@ from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 
 TOKEN = "6397148691:AAG0QzG6dpDhGpoqETpkiwpQs2r4cWANL8w"
+PROXY_URL = "http://proxy.server:3128"
 
 dp = Dispatcher()
 
@@ -19,7 +20,7 @@ async def command_start_handler(message: Message) -> None:
 
 
 async def main() -> None:
-    bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
+    bot = Bot(TOKEN, proxy=PROXY_URL, parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
 
 
