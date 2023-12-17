@@ -3,6 +3,7 @@ import logging
 import sys
 
 from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
@@ -22,7 +23,7 @@ async def command_start_handler(message: Message) -> None:
 
 async def main() -> None:
     session = AiohttpSession(proxy=PROXY)
-    bot = Bot(TOKEN, session=session)
+    bot = Bot(TOKEN, session=session, parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
 
 
