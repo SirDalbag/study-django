@@ -3,13 +3,14 @@ import logging
 import sys
 
 from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
+from aiogram.filters.command import Command
+from aiogram.client.session.aiohttp import AiohttpSession
 
 TOKEN = "6397148691:AAG0QzG6dpDhGpoqETpkiwpQs2r4cWANL8w"
-PROXY_URL = "http://proxy.server:3128"
+PROXY = "http://proxy.server:3128"
 
 dp = Dispatcher()
 
@@ -20,7 +21,8 @@ async def command_start_handler(message: Message) -> None:
 
 
 async def main() -> None:
-    bot = Bot(TOKEN, proxy=PROXY_URL, parse_mode=ParseMode.HTML)
+    session = AiohttpSession(proxy=PROXY)
+    bot = Bot(TOKEN, session=session)
     await dp.start_polling(bot)
 
 
