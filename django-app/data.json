@@ -1,0 +1,22 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Nike Super Max",
+        "image": "n1.svg",
+        "price": 19.99
+      },
+      {
+        "id": 2,
+        "name": "Nike Air Max",
+        "image": "n2.svg",
+        "price": 29.99
+      },
+      {
+        "id": 3,
+        "name": "Nike Simple Air",
+        "image": "n3.svg",
+        "price": 39.99
+      }
+    ]
+  }
