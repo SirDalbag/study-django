@@ -17,6 +17,7 @@
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><a href="{% url 'home' %}" class="nav-link px-3 link-dark {% if request.path == '/' %} border-bottom border-top {% endif %}">Home</a></li>
         <li><a href="{% url 'products' %}" class="nav-link px-3 link-dark {% if request.path == '/products' %} border-bottom border-top {% endif %}">Products</a></li>
+        <li><a href="{% url 'add' %}" class="nav-link px-3 link-dark {% if request.path == '/add' %} border-bottom border-top {% endif %}">Create Product</a></li>
       </ul>
       <div class="col-md-3 text-end">
         <a href="{% url 'login' %}" class="text-decoration-none">
