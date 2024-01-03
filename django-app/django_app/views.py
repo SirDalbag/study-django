@@ -3,10 +3,15 @@ import json
 import random
 
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 from django.core.cache import caches
 from django.views.decorators.cache import cache_page
 from .forms import ProductForm
 from .models import Product
+from django_app import models
 
 RamCache = caches["default"]
 
@@ -25,12 +30,45 @@ def home(request):
     return render(request, "home.html", context={})
 
 
-def login(request):
-    return render(request, "login.html", context={})
+def sign_in(request):
+    if request.method == "GET":
+        return render(request, "sign-in.html")
+    elif request.method == "POST":
+        email = str(request.POST["email"])
+        pwd = str(request.POST["pwd"])
+        user = authenticate(username=email, password=pwd)
+        if user is None:
+            return render(
+                request,
+                "sign-in.html",
+                context={"error": "Invalid email or password"},
+            )
+        login(request, user)
+        return redirect("products")
 
 
 def sign_up(request):
-    return render(request, "sign-up.html", context={})
+    if request.method == "GET":
+        return render(request, "sign-up.html")
+    elif request.method == "POST":
+        email = str(request.POST["email"])
+        pwd = str(request.POST["pwd"])
+        user = authenticate(username=email, password=pwd)
+        if user is None:
+            user = User.objects.create(username=email, password=make_password(pwd))
+        else:
+            return render(
+                request,
+                "sign-up.html",
+                context={"error": "Email is already registered"},
+            )
+        login(request, user)
+        return redirect("products")
+
+
+def log_out(request):
+    logout(request)
+    return redirect("sign-in")
 
 
 @cache_page(5)
