@@ -18,6 +18,8 @@
         <li><a href="{% url 'home' %}" class="nav-link px-3 link-dark {% if request.path == '/' %} border-bottom border-top {% endif %}">Home</a></li>
         <li><a href="{% url 'products' %}" class="nav-link px-3 link-dark {% if request.path == '/products' %} border-bottom border-top {% endif %}">Products</a></li>
         {% if request.user.is_authenticated %}
+        <li><a href="{% url 'reports' %}" class="nav-link px-3 link-dark {% if request.path == '/add' %} border-bottom border-top {% endif %}">Reports</a></li>
+        <li><a href="{% url 'report-add' %}" class="nav-link px-3 link-dark {% if request.path == '/add' %} border-bottom border-top {% endif %}">Create Report</a></li>
         <li><a href="{% url 'add' %}" class="nav-link px-3 link-dark {% if request.path == '/add' %} border-bottom border-top {% endif %}">Create Product</a></li>
         {% endif %}
       </ul>

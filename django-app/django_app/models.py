@@ -55,3 +55,83 @@ class Product(models.Model):
         else:
             status = "Out of stock"
         return f"<Product [{self.id}] {self.name} {self.price} | {status}>"
+
+
+class Report(models.Model):
+    id = models.AutoField(
+        db_index=True,
+        primary_key=True,
+        validators=[
+            MinLengthValidator(12),
+            MaxLengthValidator(12),
+        ],
+        unique=True,
+        editable=True,
+        blank=True,
+        null=False,
+        default=None,
+        verbose_name="ID",
+        max_length=12,
+    )
+    email = models.CharField(
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        verbose_name="Email",
+        max_length=200,
+    )
+    report = models.CharField(
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        verbose_name="Report",
+        max_length=200,
+    )
+    type = models.CharField(
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        verbose_name="Type",
+        max_length=50,
+    )
+    date = models.CharField(
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=True,
+        default="",
+        verbose_name="Date",
+        max_length=50,
+    )
+    status = models.BooleanField(
+        null=False,
+        default=True,
+        verbose_name="Status",
+    )
+
+    class Meta:
+        app_label = "django_app"
+        ordering = ("status", "id", "date")
+        verbose_name = "Report"
+        verbose_name_plural = "Reports"
+
+    def __str__(self):
+        if self.status:
+            status = "Active"
+        else:
+            status = "Inactive"
+        return f"<Report [{self.id}] {self.email} {self.type} | {status}>"

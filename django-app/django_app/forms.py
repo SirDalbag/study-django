@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product
+from .models import Product, Report
 
 
 class ProductForm(forms.ModelForm):
@@ -9,3 +9,9 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ["name", "price", "image"]
+
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ["email", "report", "type"]

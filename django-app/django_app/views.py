@@ -1,4 +1,3 @@
-import time
 import json
 import random
 
@@ -7,10 +6,13 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import login
+from django.utils import timezone
 from django.core.cache import caches
 from django.views.decorators.cache import cache_page
-from .forms import ProductForm
-from .models import Product
+from django.core.paginator import Paginator
+from django.views.decorators.http import require_POST
+from .forms import ProductForm, ReportForm
+from .models import Product, Report
 from django_app import models
 
 RamCache = caches["default"]
@@ -137,3 +139,56 @@ def delete(request, pk):
         product.delete()
         return redirect("products")
     return render(request, "confirm.html", {"product": product})
+
+
+@cache_page(5)
+def reports(request, report_type=None):
+    if report_type is None:
+        reports = Report.objects.all()
+    else:
+        reports = Report.objects.filter(type=report_type)
+    selected_page = request.GET.get(key="page", default=1)
+    page_objs = Paginator(object_list=reports, per_page=5)
+    page_obj = page_objs.page(number=selected_page)
+    return render(
+        request,
+        "reports.html",
+        context={"page_obj": page_obj, "selected_type": report_type},
+    )
+
+
+def report(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+    return render(request, "report-card.html", {"report": report})
+
+
+def report_add(request):
+    if request.method == "POST":
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            try:
+                report = form.save()
+                report.date = timezone.now().strftime("%d %b %y")
+                report.save()
+                return render(
+                    request,
+                    "reports-form.html",
+                    {"form": form, "report": report},
+                )
+            except Exception as e:
+                error = f"An error occurred while saving the report: {e}"
+                return render(
+                    request,
+                    "reports-form.html",
+                    {"form": form, "error": error},
+                )
+    else:
+        form = ReportForm()
+    return render(request, "reports-form.html", {"form": form})
+
+
+@require_POST
+def report_delete(request, report_id):
+    report = get_object_or_404(Report, id=report_id)
+    report.delete()
+    return redirect("reports")
