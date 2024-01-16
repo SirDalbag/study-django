@@ -1,0 +1,54 @@
+{% extends "components/index.html" %}
+{% load django_app_filters_and_tags %}
+{% block main %}
+<div class="min-w-100 bg-gray-100 p-8">
+    <div class="grid md:grid-cols-2 items-center md:gap-8 gap-6 font-[sans-serif] text-[#333] max-w-5xl max-md:max-w-md mx-auto">
+        <div class="max-md:order-1 max-md:text-center">
+            <h2 class="md:text-4xl text-3xl md:leading-10 font-extrabold text-[#333] mb-4">$ {{ product.price|format_price }}</h2>
+          <h2 class="md:text-3xl text-2xl md:leading-10 font-extrabold text-[#333] mb-4">{{ product.title }}</h2>
+          <h2 class="text-base md:leading-10 font-extrabold text-[#333] mb-4">Views: {{ product.views_count }}</h2>
+          <p class="mt-4 text-base text-[#666] leading-relaxed">{{ product.description }}</p>
+          <div class="mt-8 flex max-sm:flex-col sm:space-x-4 max-sm:space-y-6">
+            <a href="javascript:void(0);" class="px-6 py-3 text-base font-semibold text-white bg-[#007bff] rounded-full hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-[#007bff] focus:outline-none focus:ring-opacity-50">Order Now</a>
+            <a href="javascript:void(0);" class="px-6 py-3 text-base font-semibold text-[#007bff] border border-[#007bff] rounded-full hover:text-white hover:bg-[#007bff] transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-[#007bff] focus:outline-none focus:ring-opacity-50">Favorites</a>
+          </div>
+          <div class="flex mt-6 gap-4">
+            {% for tag in product.tags.all %}
+            <a href="{% url 'tags' product.category.slug tag.slug %}">
+                <span class="bg-[#007bff] rounded px-2 py-1 text-xs text-white rounded">{{ tag.title }}</span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+    </div>
+    <div class="font-[sans-serif] w-max mx-auto bg-white border-2 divide-x-2 flex rounded overflow-hidden">
+      {% if is_my_rating == 1 %}
+      <a href="{% url 'rating' product.id '1' %}">
+        <button type="button" class="bg-green-300 px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none hover:bg-green-50 transition-all">Like</button>
+      </a>
+      {% else %}
+      <a href="{% url 'rating' product.id '1' %}">
+        <button type="button" class="px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none hover:bg-green-50 transition-all">Like</button>
+      </a>
+      {% endif %}
+      {% if is_my_rating == -1 %}
+      <a href="{% url 'rating' product.id '2' %}">
+        <button type="button" class="bg-red-300 px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none hover:bg-red-50 transition-all">Dislike</button>
+      </a>
+      {% else %}
+      <a href="{% url 'rating' product.id '2' %}">
+        <button type="button" class="px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none hover:bg-red-50 transition-all">Dislike</button>
+      </a>
+      {% endif %}
+      {% if total_rating > 0 %}
+      <button type="button" class="bg-green-500 px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none transition-all">{{ total_rating }}</button>
+      {% else %}
+        {% if total_rating == 0 %}
+        <button type="button" class="px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none transition-all">{{ total_rating }}</button>
+        {% else %}
+        <button type="button" class="bg-red-500 px-4 py-2.5 flex items-center text-[#333] text-sm tracking-wider font-semibold outline-none transition-all">{{ total_rating }}</button>
+        {% endif %}
+      {% endif %}
+    </div>
+</div>
+{% endblock main %}

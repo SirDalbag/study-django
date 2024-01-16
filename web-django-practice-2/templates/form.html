@@ -1,0 +1,81 @@
+{% extends "components/index.html" %}
+{% block main %}
+<div class="flex flex-col justify-center items-center font-[sans-serif] bg-gradient-to-r from-blue-800 to-blue-500 text-[#333] lg:h-screen p-6">
+    <div class="grid md:grid-cols-2 items-center gap-y-8 bg-white max-w-7xl w-full shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md">
+      <div class="max-md:order-1 flex flex-col justify-center sm:p-6 p-4 bg-gradient-to-r from-blue-600 to-blue-700 w-full h-full space-y-16">
+        <div class="max-w-md space-y-12 mx-auto">
+          <div>
+            <h4 class="text-white text-lg font-semibold">Create Your Product</h4>
+            <p class="text-[13px] text-white mt-2">Welcome to the product creation page</p>
+          </div>
+          <div>
+            <h4 class="text-white text-lg font-semibold">Simple & Secure Create</h4>
+            <p class="text-[13px] text-white mt-2">Our create process is designed to be straightforward and secure. We prioritize your privacy and data security</p>
+          </div>
+          <div>
+            <h4 class="text-white text-lg font-semibold">Terms and Conditions Agreement</h4>
+            <p class="text-[13px] text-white mt-2">Require users to accept the terms and conditions of your service during create</p>
+          </div>
+        </div>
+      </div>
+      <form class="sm:p-6 p-4 w-full" method="POST">
+        {% csrf_token %}
+        <div class="mb-12">
+          <h3 class="text-blue-500 text-3xl font-extrabold max-md:text-center">Product</h3>
+        </div>
+        <div class="grid lg:grid-cols-1 gap-y-7 gap-x-7">
+          <div>
+            <label class="text-sm mb-2 block">Title</label>
+            <input name="title" type="text" class="bg-gray-100 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Enter title" required=""/>
+          </div>
+          <div>
+            <label class="text-sm mb-2 block">Price</label>
+            <input name="price" type="number" class="bg-gray-100 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Enter price" required=""/>
+          </div>
+          <div class="relative">
+            <label class="text-sm mb-2 block">Choose your category</label>
+            <select name="category" class="bg-gray-100 w-full text-sm px-4 py-3 rounded-md outline-blue-500" id="category" required="">
+              <option selected>Category</option>
+              {% for category in categories %}
+              <option  value="{{ category.id }}">{{ category.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="relative">
+            <label class="text-sm mb-2 block">Choose your tags</label>
+            <select name="tags" class="bg-gray-100 w-full text-sm px-4 py-3 rounded-md outline-blue-500" id="tags" required="" multiple>
+              <option selected>Tag</option>
+              {% for tag in tags %}
+              <option  value="{{ tag.id }}">{{ tag.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+          <textarea name="description" id="description" rows="4" class="bg-gray-100 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Write product description here" required=""></textarea> 
+        </div>
+        <div class="mt-6">
+          <button type="submit" class="min-w-[150px] py-3 px-4 text-sm font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all">
+            Create
+          </button>
+        </div>
+        {% if not GET %}
+        {% if status %}
+        <div class="flex items-center justify-center mt-8">
+            <div class="bg-green-100 text-green-800 px-4 py-4 rounded text-center mb-6" role="alert">
+                <strong class="font-bold text-base m-6">Success!</strong>
+            </div>
+        </div>
+        {% else %}
+        <div class="flex items-center justify-center mt-8">
+          <div class="bg-red-100 text-red-800 px-4 py-4 rounded text-center mb-6" role="alert">
+              <strong class="font-bold text-base m-6">Error!</strong>
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+      </form>
+    </div>
+</div>
+{% endblock main %}
