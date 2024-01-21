@@ -1,0 +1,47 @@
+{% extends "components/base.html" %}
+{% block main %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3 p-3">
+          <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="{% url 'home' %}">Products</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Form</li>
+        </ol>
+    </nav>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 text-center">
+            <h2 class="pb-2 border-bottom">Product</h2>
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="text" class="form-control" id="price" name="price" required>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <input class="form-control" type="file" id="image" name="image" accept=".jpg, .jpeg, .png" required>
+        </div>
+        <div class="mb-3 py-3 border-top">
+            <button type="submit" class="w-100 btn btn-outline-dark">Submit</button>
+        </div>
+    </form>
+    {% if status == "success" %}
+    <div class="alert alert-success" role="alert">
+        The product has been successfully created
+    </div>
+    {% elif status == "error" %}
+    <div class="alert alert-danger" role="alert">
+        An error occurred during product creation
+    </div>
+    {% endif %}
+</div>
+{% endblock main %}
