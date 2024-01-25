@@ -212,3 +212,30 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"Rating <{self.id}> [{self.product.id}] {self.product.title} | {self.is_like}"
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        verbose_name="User",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=100,
+        to=User,
+        on_delete=models.CASCADE,
+    )
+    product = models.ForeignKey(
+        verbose_name="Product",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=100,
+        to=Product,
+        on_delete=models.CASCADE,
+    )

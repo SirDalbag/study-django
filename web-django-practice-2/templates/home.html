@@ -1,7 +1,7 @@
 {% extends "components/index.html" %}
 
 {% block main %}
-<form method="post" action="{% url 'search' %}" enctype="multipart/form-data">
+<form method="get" action="{% url 'search' %}" enctype="multipart/form-data">
 <div class="bg-gray-100 border border-transparent focus-within:border-blue-500 flex px-6 rounded-full h-9 lg:w-2/4 mt-3 mx-auto max-lg:mt-6">
       {% csrf_token %}
       <button type="submit">

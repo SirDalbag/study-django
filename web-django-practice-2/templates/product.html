@@ -9,8 +9,9 @@
           <h2 class="text-base md:leading-10 font-extrabold text-[#333] mb-4">Views: {{ product.views_count }}</h2>
           <p class="mt-4 text-base text-[#666] leading-relaxed">{{ product.description }}</p>
           <div class="mt-8 flex max-sm:flex-col sm:space-x-4 max-sm:space-y-6">
-            <a href="javascript:void(0);" class="px-6 py-3 text-base font-semibold text-white bg-[#007bff] rounded-full hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-[#007bff] focus:outline-none focus:ring-opacity-50">Order Now</a>
-            <a href="javascript:void(0);" class="px-6 py-3 text-base font-semibold text-[#007bff] border border-[#007bff] rounded-full hover:text-white hover:bg-[#007bff] transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-[#007bff] focus:outline-none focus:ring-opacity-50">Favorites</a>
+            <a href="#" class="px-6 py-3 text-base font-semibold text-white bg-[#007bff] rounded-full hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-[#007bff] focus:outline-none focus:ring-opacity-50">Order Now</a>
+            {% is_favorite product.id as is_my_favorite %}
+            <a href="{% url 'favorite' product.id %}" class="px-6 py-3 text-base font-semibold {% if is_my_favorite %} text-gray-900 border-gray-900 hover:bg-gray-900 {% else %} text-green-900 border-green-900 hover:bg-green-900 {% endif %} border rounded-full hover:text-white  transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-[#007bff] focus:outline-none focus:ring-opacity-50">Favorites</a>
           </div>
           <div class="flex mt-6 gap-4">
             {% for tag in product.tags.all %}

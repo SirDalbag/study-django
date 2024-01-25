@@ -1,0 +1,112 @@
+{% extends "components/base.html" %}
+{% load static %}
+{% block main %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3 p-3">
+          <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Chat</li>
+        </ol>
+    </nav>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3 text-center">
+            <h2 class="pb-2 border-bottom">Chat</h2>
+        </div>
+        <div class="border row d-flex justify-content-center">
+            <div class="p-3">
+              <div class="overflow-auto" style="max-height: 375px;">
+                <div class="d-flex flex-column gap-3">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="d-flex gap-3 align-items-center">
+                            <img src="{% static message.user.profile.avatar.url %}" width="36" height="36" class="rounded-circle">
+                            <div class="d-flex flex-column">
+                                <p class="h6">{{ message.user.profile.name }}</p>
+                                <div class="card">
+                                    <div class="card-body rounded d-flex flex-column">
+                                    {{ message.content }}
+                                    <small class="mt-1 pt-1 text-body-secondary border-top">{{ message.created }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="d-flex gap-3 align-items-center justify-content-center">
+                        <div class="d-flex flex-column">
+                            <p class="h6">{{ message.user.profile.name }}</p>
+                            <div class="card border-danger">
+                                <div class="card-body rounded d-flex flex-column text-danger">
+                                There are no messages
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="my-3">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+        </div>
+        <div class="mb-3 py-3 border-top">
+            <button type="submit" class="w-100 btn btn-outline-dark">Send</button>
+        </div>
+    </form>
+</div>
+<!-- {{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username" }}
+<script>
+    const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if(data.message){
+            let html = `
+            <div class="d-flex gap-3 align-items-center">
+                <img src="{% static message.user.profile.avatar.url %}" width="36" height="36" class="rounded-circle">
+                <div class="d-flex flex-column">
+                    <p class="h6">{{ message.user.profile.name }}</p>
+                    <div class="card">
+                        <div class="card-body rounded d-flex flex-column">
+                            {{ message.content }}
+                            <small class="mt-1 pt-1 text-body-secondary border-top">{{ message.created }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+            document.querySelector('#chat-messages').innerHTML += html;
+            scrollToBottom();
+        } else{
+        }
+    }
+    chatSocket.onclose = function(e) {
+        console.log("Bye!")
+    }
+    document.querySelector('#chat-message-submit').onclick = function(e){
+        e.preventDefault() 
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': roomName
+        }));
+        messageInputDom.value = '';
+        return false;
+    }
+    function scrollToBottom() {
+        const objDiv = document.querySelector('#chat-messages');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+    scrollToBottom();
+</script> -->
+{% endblock main %}

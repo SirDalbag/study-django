@@ -1,14 +1,51 @@
 from django.core.validators import FileExtensionValidator
+from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
-# from django.http import HttpRequest
-# from django.urls import reverse
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-# import qrcode
-# from io import BytesIO
-# from PIL import Image
-# from django.core.files.base import ContentFile
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        verbose_name="User",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=True,
+        default=None,
+        max_length=300,
+        to=User,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
+    name = models.CharField(
+        verbose_name="Name",
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=True,
+        default="",
+        max_length=300,
+    )
+    avatar = models.ImageField(
+        verbose_name="Avatar",
+        validators=[FileExtensionValidator(["jpg", "png", "jpeg"])],
+        unique=False,
+        editable=True,
+        blank=True,
+        null=True,
+        default="profile\avatars\default.png",
+        upload_to="profile/avatars",
+    )
+
+    class Meta:
+        app_label = "auth"
+        ordering = ("-user",)
+
+    def __str__(self):
+        return f"ID [{self.id}] {self.name}"
 
 
 class Product(models.Model):
@@ -37,26 +74,97 @@ class Product(models.Model):
         return f"ID [{self.id}] {self.name}"
 
 
-#     def generate_qr_code(self):
-#         product_url = HttpRequest().build_absolute_uri(
-#             reverse("product", args=[self.id])
-#         )
-#         qr = qrcode.QRCode(
-#             version=1,
-#             error_correction=qrcode.constants.ERROR_CORRECT_L,
-#             box_size=10,
-#             border=4,
-#         )
-#         qr.add_data(product_url)
-#         qr.make(fit=True)
-#         img = qr.make_image(fill_color="black", back_color="white")
-#         img_bytes = BytesIO()
-#         img.save(img_bytes, format="PNG")
-#         filename = f"qr_code_{self.id}.png"
-#         self.qr_code.save(filename, ContentFile(img_bytes.getvalue()), save=True)
-#         self.save()
+class Room(models.Model):
+    name = models.CharField(
+        verbose_name="Name",
+        db_index=True,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=255,
+    )
+    slug = models.SlugField(
+        verbose_name="Link",
+        db_index=True,
+        primary_key=False,
+        unique=True,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=300,
+    )
+    users = models.ManyToManyField(
+        verbose_name="Users",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        default="",
+        max_length=100,
+        to=User,
+    )
+
+    class Meta:
+        app_label = "django_app"
+        ordering = ("-slug", "-name")
+
+    def __str__(self):
+        return f"ID [{self.id}] {self.name}"
 
 
-# @receiver(post_save, sender=Product)
-# def generate_qr_code(sender, instance, **kwargs):
-#     instance.generate_qr_code()
+class Message(models.Model):
+    user = models.ForeignKey(
+        verbose_name="User",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=100,
+        to=User,
+        on_delete=models.CASCADE,
+    )
+    room = models.ForeignKey(
+        verbose_name="Room",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=100,
+        to=Room,
+        on_delete=models.CASCADE,
+    )
+    content = models.TextField(
+        verbose_name="Content",
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+    )
+    created = models.DateTimeField(
+        verbose_name="Created",
+        db_index=True,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default=timezone.now,
+        max_length=300,
+    )
+
+    class Meta:
+        app_label = "django_app"
+        ordering = ("created", "-room")
+
+    def __str__(self):
+        return f"ID [{self.id}] {self.room}"

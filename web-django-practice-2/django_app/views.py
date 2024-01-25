@@ -145,12 +145,34 @@ def rating(request, id: str, like: str):
     return redirect(reverse("product", args=(id,)))
 
 
+def favorites(request):
+    _favorites = models.Favorite.objects.filter(user=request.user)
+    return render(
+        request,
+        "favorites.html",
+        {"page_obj": pagination(request, _favorites)},
+    )
+
+
+def favorite(request, id):
+    product = models.Product.objects.get(id=id)
+    try:
+        favorite_product = models.Favorite.objects.get(
+            user=request.user, product=product
+        )
+        favorite_product.delete()
+    except Exception:
+        favorite_product = models.Favorite.objects.create(
+            user=request.user, product=product
+        )
+    return redirect(reverse("product", args=(id,)))
+
+
 def search(request):
-    if request.method == "POST":
-        search = request.POST.get("search", "")
-        products = models.Product.objects.all().filter(
-            status=True, title__icontains=search
-        )
-        return render(
-            request, "products.html", {"page_obj": pagination(request, products)}
-        )
+    search = request.GET.get("search", "")
+    products = models.Product.objects.all().filter(status=True, title__icontains=search)
+    return render(
+        request,
+        "products.html",
+        {"page_obj": pagination(request, products), "search": search},
+    )

@@ -1,0 +1,35 @@
+{% extends "components/base.html" %}
+{% block main %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3 p-3">
+          <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Sign In</li>
+        </ol>
+    </nav>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 text-center">
+            <h2 class="pb-2 border-bottom">Sign In</h2>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Login</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3 py-3 border-top">
+            <button type="submit" class="w-100 btn btn-outline-dark">Submit</button>
+        </div>
+    </form>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        There has been an error
+    </div>
+    {% endif %}
+</div>
+{% endblock main %}

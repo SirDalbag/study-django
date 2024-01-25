@@ -56,9 +56,10 @@
           <textarea name="description" id="description" rows="4" class="bg-gray-100 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Write product description here" required=""></textarea> 
         </div>
         <div class="mt-6">
-          <button type="submit" class="min-w-[150px] py-3 px-4 text-sm font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all">
+          <button type="submit" id="button" class="min-w-[150px] py-3 px-4 text-sm font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all" onclick="load()">
             Create
           </button>
+          {% include "components/loader.html" %}
         </div>
         {% if not GET %}
         {% if status %}

@@ -33,3 +33,21 @@ def rating_count(context, user):
 def views_count(context, id):
     product = models.Product.objects.get(id=id)
     return product.views_count
+
+
+@register.simple_tag(takes_context=True)
+def is_favorite(context, id):
+    product = models.Product.objects.get(id=id)
+    try:
+        favorite = models.Favorite.objects.get(
+            user=context["request"].user, product=product
+        )
+        return True
+    except Exception as error:
+        print(error)
+        return False
+
+
+@register.simple_tag(takes_context=True)
+def favorite_count(context):
+    return models.Favorite.objects.filter(user=context.request.user).count()

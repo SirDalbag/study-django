@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django_app import models
+from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.core.files.base import ContentFile
-from django.views.decorators.cache import cache_page
-from django.http import HttpResponse
 from django.urls import reverse
 import qrcode
 from io import BytesIO
@@ -16,20 +18,56 @@ def paginator(request, objs):
     return page_obj
 
 
-@cache_page(10)
 def home(request):
     products = models.Product.objects.all().filter(status=True)
-    return render(request, "home.html", {"products": paginator(request, products)})
+    return render(
+        request,
+        "home.html",
+        {"products": paginator(request, products)},
+    )
+
+
+def rooms(request):
+    rooms = models.Room.objects.filter(users=request.user)
+    return render(request, "rooms.html", {"rooms": rooms})
+
+
+def room(request):
+    user = request.user
+    admin = models.User.objects.get(username="admin")
+    room = models.Room.objects.filter(users=user).first()
+    if not room:
+        room = models.Room.objects.create(name=f"Chat {user.id}", slug=f"c{user.id}")
+        room.users.set([user, admin])
+    return redirect("chat", id=room.id)
+
+
+@login_required
+def chat(request, id):
+    if request.method == "GET":
+        messages = models.Message.objects.filter(room=id)
+        return render(request, "chat.html", {"messages": messages})
+    else:
+        room = models.Room.objects.get(id=id)
+        content = request.POST.get("message", None)
+        if content:
+            message = models.Message.objects.create(
+                user=request.user, room=room, content=content
+            )
+        return redirect("chat", id=id)
 
 
 def search(request):
-    if request.method == "POST":
-        search = request.POST.get("search", "")
+    if request.method == "GET":
+        search = request.GET.get("search", "")
         products = models.Product.objects.all().filter(
             status=True, name__icontains=search
         )
-        print(search)
-        return render(request, "home.html", {"products": paginator(request, products)})
+        return render(
+            request,
+            "home.html",
+            {"products": paginator(request, products), "search": search},
+        )
 
 
 def product(request, id):
@@ -58,6 +96,24 @@ def qr_code(request, id):
     return render(request, "qr-code.html", {"product": product})
 
 
+def profile(request, id):
+    if request.method == "GET":
+        return render(request, "profile.html")
+    elif request.method == "POST":
+        name = request.POST["name"]
+        avatar = request.FILES.get("avatar", None)
+        clear_avatar = True if request.POST.get("clear_avatar", None) else False
+        profile = models.Profile.objects.get(id=id)
+        if profile.name != name:
+            profile.name = name
+        if clear_avatar:
+            profile.avatar = "profile/avatars/default.png"
+        if avatar:
+            profile.avatar = avatar
+        profile.save()
+        return render(request, "profile.html")
+
+
 def form(request):
     if request.method == "GET":
         return render(request, "form.html")
@@ -74,3 +130,49 @@ def form(request):
         except Exception:
             status = "error"
         return render(request, "form.html", {"status": status})
+
+
+def sign_up(request):
+    if request.method == "GET":
+        return render(request, "sign-up.html")
+    elif request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if not user:
+            name = request.POST["name"]
+            avatar = request.FILES["avatar"]
+            user = User.objects.create(
+                username=username, password=make_password(password)
+            )
+            profile = models.Profile.objects.create(user=user, name=name, avatar=avatar)
+            login(request, user)
+            return redirect("home")
+        else:
+            return render(
+                request,
+                "sign-up.html",
+                context={"error": True},
+            )
+
+
+def sign_in(request):
+    if request.method == "GET":
+        return render(request, "sign-in.html")
+    elif request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if not user:
+            return render(
+                request,
+                "sign-in.html",
+                context={"error": True},
+            )
+        login(request, user)
+        return redirect("home")
+
+
+def sign_out(request):
+    logout(request)
+    return redirect(reverse("sign-in"))

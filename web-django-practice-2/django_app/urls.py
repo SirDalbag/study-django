@@ -8,9 +8,11 @@ urlpatterns = [
     path("sign-in", views.sign_in, name="sign-in"),
     path("logout", views.log_out, name="logout"),
     path("likes/", views.likes, name="likes"),
+    path("favorites/", views.favorites, name="favorites"),
     path("<slug>/", views.products, name="products"),
     path("products/<id>", views.product, name="product"),
     path("<category>/<tag>", views.tags, name="tags"),
     path("create-product", views.create_product, name="create-product"),
     path("product/<id>/rating/<like>/", views.rating, name="rating"),
+    path("product/<id>/favorite/", views.favorite, name="favorite"),
 ]
