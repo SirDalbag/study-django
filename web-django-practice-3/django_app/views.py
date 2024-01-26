@@ -20,6 +20,9 @@ def paginator(request, objs):
 
 def home(request):
     products = models.Product.objects.all().filter(status=True)
+    sort = request.GET.get("sort", None)
+    if sort:
+        products = models.Product.objects.order_by(sort)
     return render(
         request,
         "home.html",
@@ -72,6 +75,20 @@ def search(request):
 
 def product(request, id):
     product = models.Product.objects.get(id=id)
+    if request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+        price = float(request.POST["price"].replace(",", "."))
+        image = request.FILES.get("image", None)
+        if product.name != name:
+            product.name = name
+        if product.description != description:
+            product.description = description
+        if product.price != price:
+            product.price = price
+        if image:
+            product.image = image
+        product.save()
     return render(request, "product.html", {"product": product})
 
 
@@ -107,7 +124,7 @@ def profile(request, id):
         if profile.name != name:
             profile.name = name
         if clear_avatar:
-            profile.avatar = "profile/avatars/default.png"
+            profile.avatar = "profile/avatar/default.png"
         if avatar:
             profile.avatar = avatar
         profile.save()
@@ -141,11 +158,11 @@ def sign_up(request):
         user = authenticate(username=username, password=password)
         if not user:
             name = request.POST["name"]
-            avatar = request.FILES["avatar"]
+            image = request.FILES["image"]
             user = User.objects.create(
                 username=username, password=make_password(password)
             )
-            profile = models.Profile.objects.create(user=user, name=name, avatar=avatar)
+            profile = models.Profile.objects.create(user=user, name=name, image=image)
             login(request, user)
             return redirect("home")
         else:

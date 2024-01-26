@@ -33,7 +33,7 @@
                 {% endif %}
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="GET" action="{% url 'search' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="search" id="search" name="search" class="form-control" placeholder="Search..." aria-label="Search" required>
+                    <input type="search" id="search" name="search" class="form-control" placeholder="Search..." aria-label="Search" value="{{ search }}" required>
                 </form>
                 {% if request.user.is_authenticated %}
                 <div class="dropdown text-end">

@@ -23,6 +23,43 @@
               <button type="button" class="btn btn-dark btn-lg px-4">Get QR-code</button>
             </a>
           </div>
+          {% if request.user.is_authenticated %}
+          <div class="accordion mt-3 w-100" id="accordion">
+            <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Edit Product
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+                <div class="accordion-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="description" class="form-label">Description</label>
+                          <textarea class="form-control" id="description" name="description" rows="3">{{ product.description }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                          <label for="price" class="form-label">Price</label>
+                          <input type="text" class="form-control" id="price" name="price" value="{{ product.price }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image</label>
+                            <input class="form-control" type="file" id="image" name="image" accept=".jpg, .jpeg, .png" required>
+                        </div>
+                        <div class="mb-3 py-3 border-top">
+                            <button type="submit" class="w-100 btn btn-outline-dark">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endif %}
         </div>
     </div>
 </div>

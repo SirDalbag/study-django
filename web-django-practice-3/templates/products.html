@@ -10,6 +10,18 @@
         {% endif %}
     </div>
     {% if products %}
+    <form method="GET" action="{% url 'home' %}" class="my-3">
+        <div class="input-group">
+            <select class="form-select" id="sort" name="sort">
+                <option value="id" selected>Sort products</option>
+                <option value="price">Cheapest</option>
+                <option value="-price">Most expensive</option>
+                <option value="-id">New</option>
+                <option value="id">Old</option>
+            </select>
+            <button class="btn btn-outline-dark" type="submit">Apply</button>
+        </div>
+    </form>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for product in products %}
         <div class="col">
