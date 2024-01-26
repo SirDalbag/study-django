@@ -1,4 +1,4 @@
-# TODO Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+# TODO Given a sorted numsay of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
 def searchInsert(nums: list[int], target: int) -> int:
     if target in nums:
         return sorted(nums).index(target)
@@ -23,3 +23,11 @@ def intToRoman(num: int) -> str:
             num -= value
             result += symbols[i]
     return result
+
+
+# TODO Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+def sortColors(nums: list[int]) -> None:
+    for i in range(len(nums)):
+        for j in range(0, len(nums) - i - 1):
+            if nums[j] > nums[j + 1]:
+                nums[j], nums[j + 1] = nums[j + 1], nums[j]
