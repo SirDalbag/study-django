@@ -38,7 +38,7 @@ class Profile(models.Model):
         editable=True,
         blank=True,
         null=True,
-        default="profile\avatars\default.png",
+        default="profile/avatars/default.png",
         upload_to="profile/avatars",
     )
 
