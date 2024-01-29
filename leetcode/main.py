@@ -31,3 +31,8 @@ def sortColors(nums: list[int]) -> None:
         for j in range(0, len(nums) - i - 1):
             if nums[j] > nums[j + 1]:
                 nums[j], nums[j + 1] = nums[j + 1], nums[j]
+
+
+# TODO Given an input string s, reverse the order of the words.
+def reverseWords(s: str) -> str:
+    return " ".join(reversed(s.split()))
