@@ -49,10 +49,6 @@ class Profile(models.Model):
     def __str__(self):
         return f"ID [{self.id}] {self.name}"
 
-    @property
-    def is_action(self):
-        return self.check_access("create")
-
 
 @receiver(post_save, sender=User)
 def profile_create(sender, instance, created, **kwargs):
