@@ -158,11 +158,16 @@ def sign_up(request):
         user = authenticate(username=username, password=password)
         if not user:
             name = request.POST["name"]
-            image = request.FILES["image"]
+            avatar = request.FILES.get("avatar", None)
+            if not avatar:
+                avatar = "profile/avatars/default.png"
             user = User.objects.create(
                 username=username, password=make_password(password)
             )
-            profile = models.Profile.objects.create(user=user, name=name, image=image)
+            profile = models.Profile.objects.get(user=user)
+            profile.name = name
+            profile.avatar = avatar
+            profile.save()
             login(request, user)
             return redirect("home")
         else:

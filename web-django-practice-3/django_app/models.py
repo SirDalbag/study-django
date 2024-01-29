@@ -1,5 +1,7 @@
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db import models
 from django.utils import timezone
 
@@ -43,6 +45,98 @@ class Profile(models.Model):
     class Meta:
         app_label = "auth"
         ordering = ("-user",)
+
+    def __str__(self):
+        return f"ID [{self.id}] {self.name}"
+
+    @property
+    def is_action(self):
+        return self.check_access("create")
+
+
+@receiver(post_save, sender=User)
+def profile_create(sender, instance, created, **kwargs):
+    try:
+        profile = Profile.objects.get(user=instance)
+    except Exception:
+        profile = Profile.objects.create(
+            user=instance, name="Unknown User", avatar="profile/avatars/default.png"
+        )
+
+
+class Action(models.Model):
+    slug = models.SlugField(
+        verbose_name="Link",
+        db_index=True,
+        primary_key=False,
+        unique=True,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=500,
+    )
+    name = models.TextField(
+        verbose_name="Name",
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+    )
+
+    class Meta:
+        app_label = "auth"
+        ordering = ("slug",)
+        verbose_name = "Action"
+        verbose_name_plural = "Actions"
+
+    def __str__(self):
+        return f"ID [{self.id}] {self.name}"
+
+
+class GroupExtend(models.Model):
+    name = models.CharField(
+        verbose_name="Name",
+        db_index=True,
+        primary_key=False,
+        unique=True,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=300,
+    )
+    users = models.ManyToManyField(
+        verbose_name="Users",
+        db_index=True,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        default="",
+        max_length=300,
+        to=User,
+    )
+    actions = models.ManyToManyField(
+        verbose_name="Actions",
+        db_index=True,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        default="",
+        max_length=300,
+        to=Action,
+    )
+
+    class Meta:
+        app_label = "auth"
+        ordering = ("name",)
+        verbose_name = "GroupExtend"
+        verbose_name_plural = "GroupsExtend"
 
     def __str__(self):
         return f"ID [{self.id}] {self.name}"

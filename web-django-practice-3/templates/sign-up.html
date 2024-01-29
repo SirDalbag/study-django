@@ -3,10 +3,10 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3 p-3">
-          <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="{% url 'home' %}">Home</a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">Sign Up</li>
+            <li class="breadcrumb-item">
+                <a class="link-body-emphasis fw-semibold text-decoration-none" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Sign Up</li>
         </ol>
     </nav>
     <form method="POST" enctype="multipart/form-data">
@@ -28,7 +28,7 @@
         </div>
         <div class="mb-3">
             <label for="avatar" class="form-label">Avatar</label>
-            <input class="form-control" type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png" required>
+            <input class="form-control" type="file" id="avatar" name="avatar" accept=".jpg, .jpeg, .png">
         </div>
         <div class="mb-3 py-3 border-top">
             <button type="submit" class="w-100 btn btn-outline-dark">Submit</button>

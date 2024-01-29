@@ -1,12 +1,16 @@
+{% load django_app_filters_and_tags %}
 {% load static %}
 <div class="container my-3">
     <div class="mb-3 text-center border-bottom">
         <h2 class="pb-1">Our products</h2>
         <h5 class="pb-1 text-muted fw-normal">Total count products - {{ products_count }}</h5>
         {% if request.user.is_authenticated %}
+        {% check_access "create" as access %}
+        {% if access %}
         <a href="{% url 'form' %}">
             <button type="button" class="mb-3 btn btn-outline-dark">Post your product</button>
         </a>
+        {% endif %}
         {% endif %}
     </div>
     {% if products %}
@@ -51,17 +55,22 @@
 <nav class="d-flex justify-content-center">
     <ul class="pagination">
         <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
-            <a class="page-link" href="{% if products.has_previous %} ?page={{ products.previous_page_number }} {% else %} ?page=1 {% endif %} {% if search %} &search={{ search }} {% endif %}" aria-label="Previous">
+            <a class="page-link"
+                href="{% if products.has_previous %} ?page={{ products.previous_page_number }} {% else %} ?page=1 {% endif %} {% if search %} &search={{ search }} {% endif %}"
+                aria-label="Previous">
                 <span class="text-dark" aria-hidden="true">&laquo;</span>
             </a>
         </li>
         {% for page_num in products.paginator.page_range %}
         <li class="page-item">
-            <a class="page-link text-dark {% if page_num == products.number %} bg-dark text-white {% endif %}" href="?page={{ page_num }} {% if search %} &search={{ search }} {% endif %}">{{ page_num }}</a>
+            <a class="page-link text-dark {% if page_num == products.number %} bg-dark text-white {% endif %}"
+                href="?page={{ page_num }} {% if search %} &search={{ search }} {% endif %}">{{ page_num }}</a>
         </li>
         {% endfor %}
         <li class="page-item {% if not products.has_next %} disabled {% endif %}">
-            <a class="page-link" href="{% if products.has_next %} ?page={{ products.next_page_number }} {% else %} ?page={{ products.paginator.num_pages }} {% endif %} {% if search %} &search={{ search }} {% endif %}" aria-label="Next">
+            <a class="page-link"
+                href="{% if products.has_next %} ?page={{ products.next_page_number }} {% else %} ?page={{ products.paginator.num_pages }} {% endif %} {% if search %} &search={{ search }} {% endif %}"
+                aria-label="Next">
                 <span class="text-dark" aria-hidden="true">&raquo;</span>
             </a>
         </li>
