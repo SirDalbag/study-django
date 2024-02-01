@@ -36,3 +36,22 @@ def sortColors(nums: list[int]) -> None:
 # TODO Given an input string s, reverse the order of the words.
 def reverseWords(s: str) -> str:
     return " ".join(reversed(s.split()))
+
+
+# TODO Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
+from itertools import product
+
+
+def letterCombinations(digits: str) -> list[str]:
+    temp = {
+        "2": "abc",
+        "3": "def",
+        "4": "ghi",
+        "5": "jkl",
+        "6": "mno",
+        "7": "pqrs",
+        "8": "tuv",
+        "9": "wxyz",
+    }
+    comb = list(product(*[temp[x] for x in digits]))
+    return ["".join(x) for x in comb] if len(comb) != 1 else []
