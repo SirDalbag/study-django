@@ -10,7 +10,8 @@ USERS = ["969075792"]
 
 
 def index(request):
-    return render(request, "index.html")
+    vehicles = models.Vehicle.objects.all()
+    return render(request, "index.html", {"vehicles": vehicles})
 
 
 @api_view(http_method_names=["GET", "POST"])
