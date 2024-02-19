@@ -103,13 +103,13 @@ cython_debug/
 
 .vscode
 
-/node_modules
-/.pnp
+node_modules/
+.pnp/
 .pnp.js
 
-/coverage
+coverage/
 
-/build
+build/
 
 .DS_Store
 .env.local
