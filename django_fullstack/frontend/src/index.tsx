@@ -4,4 +4,4 @@ import Router from "./components/router";
 
 const container = document.getElementById("root")!;
 
-createRoot(document.getElementById("root")!).render(<Router />);
+createRoot(container).render(<Router />);
