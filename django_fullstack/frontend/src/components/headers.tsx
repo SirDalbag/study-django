@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 
 const navigation = [
-  { name: "Главное", slug: "/" },
-  { name: "Аудио", slug: "/audio" },
-  { name: "Комиксы", slug: "/comics" },
-  { name: "Детям", slug: "/kids" },
-  { name: "Мои книги", slug: "/my-books" },
-  { name: "Поиск", slug: "/search" },
+  { id: 1, name: "Главное", slug: "/" },
+  { id: 2, name: "Аудио", slug: "/audio" },
+  { id: 3, name: "Комиксы", slug: "/comics" },
+  { id: 4, name: "Детям", slug: "/kids" },
+  { id: 5, name: "Мои книги", slug: "/my-books" },
+  { id: 6, name: "Поиск", slug: "/search" },
 ];
 
 export function Header() {
@@ -20,9 +20,9 @@ export function Header() {
             <img className="h-8 w-auto" src="/icon.svg" />
           </li>
         </Link>
-        {navigation.map((item, index) => (
+        {navigation.map((item) => (
           <Link
-            key={index}
+            key={item.id}
             to={item.slug}
             className="transform transition-transform duration-100 active:scale-95"
           >
