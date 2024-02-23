@@ -25,8 +25,8 @@ export function Header() {
         </li>
         <ul className="flex gap-6">
           {navigation.map((item) => (
-            <li>
-              <Link className="group" to={item.slug} key={item.id}>
+            <li key={item.id}>
+              <Link className="group" to={item.slug}>
                 <div
                   className={`transform transition-transform duration-100 active:scale-95 border-b-2 ${
                     isActive(item.slug, location.pathname)
