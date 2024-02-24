@@ -29,14 +29,15 @@ const content = [
   <div key={1}>
     <Link to="">
       <div className="flex">
-        <img className="w-72 h-96" src="static\Tf5WHMUo.jpeg" />
+        <img className="w-72 h-96" src="static\MQa1yxXZ.jpeg" />
         <div className="flex items-center bg-white w-80">
           <div className="flex flex-col justify-center gap-6 p-4">
             <p className="font-semibold text-2xl tracking-wide">
-              Русские народные сказки
+              История отечественного кино
             </p>
             <p className="font-normal text-xl tracking-wide">
-              Народные сказки с женскими архетипами от иллюстрации Антейку
+              Узнайте всю историю отечественного кино в аудиоформате: от
+              рождения до революции до российского кино XXI века
             </p>
             <Link to="">
               <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
@@ -67,15 +68,13 @@ const content = [
   </div>,
   <Link to="" key={2}>
     <div className="flex">
-      <img className="w-72 h-96" src="static\DqAYDJFq.jpeg" />
+      <img className="w-72 h-96" src="static\HneHQX1H.jpeg" />
       <div className="flex items-center bg-white w-80">
         <div className="flex flex-col justify-center gap-6 p-4">
-          <p className="font-semibold text-2xl tracking-wide">
-            Кафе на краю земли
-          </p>
+          <p className="font-semibold text-2xl tracking-wide">Когната</p>
           <p className="font-normal text-xl tracking-wide">
-            Книга о том, как перестать плыть по течению и вспомнить, зачем ты
-            живешь
+            Девочка-дракон возвращается домой. Сериал о встрече двух миров
+            читает Сергей Гилев
           </p>
           <Link to="">
             <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
@@ -105,13 +104,12 @@ const content = [
   </Link>,
   <Link to="" key={3}>
     <div className="flex">
-      <img className="w-72 h-96" src="static\ZsSrVuO7.jpeg" />
+      <img className="w-72 h-96" src="static\NECAyPFn.jpeg" />
       <div className="flex items-center bg-white w-80">
         <div className="flex flex-col justify-center gap-6 p-4">
-          <p className="font-semibold text-2xl tracking-wide">НИСЫ</p>
+          <p className="font-semibold text-2xl tracking-wide">Я тебя прощаю</p>
           <p className="font-normal text-xl tracking-wide">
-            Восточная мудрость гласит: будь уверен в своих силах и не позволяй
-            сомнениям мешать тебе двигаться вперед
+            Как проработать семеные травмы и понять себя
           </p>
           <Link to="">
             <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
@@ -146,7 +144,7 @@ export default function Page() {
     <bases.Base>
       <div className="container mx-auto px-32 py-12">
         <div className="flex flex-col gap-8">
-          <p className="font-semibold text-5xl tracking-wide">Все книги</p>
+          <p className="font-semibold text-5xl tracking-wide">Все аудиокниги</p>
           <Categories content={categories} />
           <Carousel content={content} />
         </div>

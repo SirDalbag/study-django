@@ -29,33 +29,19 @@ const content = [
   <div key={1}>
     <Link to="">
       <div className="flex">
-        <img className="w-72 h-96" src="static\Tf5WHMUo.jpeg" />
+        <img className="w-72 h-96" src="static\RHnsi5f5.jpeg" />
         <div className="flex items-center bg-white w-80">
           <div className="flex flex-col justify-center gap-6 p-4">
-            <p className="font-semibold text-2xl tracking-wide">
-              Русские народные сказки
-            </p>
+            <p className="font-semibold text-2xl tracking-wide">Тайная книга</p>
             <p className="font-normal text-xl tracking-wide">
-              Народные сказки с женскими архетипами от иллюстрации Антейку
+              Истории из мира темного фэнтези от Тимофея Алёшкина и Валерии
+              Гудковой
             </p>
             <Link to="">
               <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
                 <div className="flex items-center gap-2 py-2 px-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#ffffff"
-                    stroke="#ffffff"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                  </svg>
                   <span className="font-semibold text-lg text-white tracking-wide">
-                    Слушать
+                    Читать
                   </span>
                 </div>
               </button>
@@ -67,34 +53,20 @@ const content = [
   </div>,
   <Link to="" key={2}>
     <div className="flex">
-      <img className="w-72 h-96" src="static\DqAYDJFq.jpeg" />
+      <img className="w-72 h-96" src="static\TtTPbot2.jpeg" />
       <div className="flex items-center bg-white w-80">
         <div className="flex flex-col justify-center gap-6 p-4">
           <p className="font-semibold text-2xl tracking-wide">
-            Кафе на краю земли
+            Скетчинг маркерами
           </p>
           <p className="font-normal text-xl tracking-wide">
-            Книга о том, как перестать плыть по течению и вспомнить, зачем ты
-            живешь
+            Пошаговое руководство от известного художника: 6 жанров, 6 уроков
           </p>
           <Link to="">
             <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
               <div className="flex items-center gap-2 py-2 px-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#ffffff"
-                  stroke="#ffffff"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
                 <span className="font-semibold text-lg text-white tracking-wide">
-                  Слушать
+                  Читать
                 </span>
               </div>
             </button>
@@ -105,32 +77,18 @@ const content = [
   </Link>,
   <Link to="" key={3}>
     <div className="flex">
-      <img className="w-72 h-96" src="static\ZsSrVuO7.jpeg" />
+      <img className="w-72 h-96" src="static\YQ6PPmYR.jpeg" />
       <div className="flex items-center bg-white w-80">
         <div className="flex flex-col justify-center gap-6 p-4">
-          <p className="font-semibold text-2xl tracking-wide">НИСЫ</p>
+          <p className="font-semibold text-2xl tracking-wide">Ведьма</p>
           <p className="font-normal text-xl tracking-wide">
-            Восточная мудрость гласит: будь уверен в своих силах и не позволяй
-            сомнениям мешать тебе двигаться вперед
+            История о юной девушки, что была обвинена в колдостве
           </p>
           <Link to="">
             <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
               <div className="flex items-center gap-2 py-2 px-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#ffffff"
-                  stroke="#ffffff"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
                 <span className="font-semibold text-lg text-white tracking-wide">
-                  Слушать
+                  Читать
                 </span>
               </div>
             </button>
@@ -146,7 +104,7 @@ export default function Page() {
     <bases.Base>
       <div className="container mx-auto px-32 py-12">
         <div className="flex flex-col gap-8">
-          <p className="font-semibold text-5xl tracking-wide">Все книги</p>
+          <p className="font-semibold text-5xl tracking-wide">Все комиксы</p>
           <Categories content={categories} />
           <Carousel content={content} />
         </div>
