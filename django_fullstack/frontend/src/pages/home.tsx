@@ -27,7 +27,7 @@ const categories = [
 
 const content = [
   <div key={1}>
-    <Link to="">
+    <Link to="/book/1">
       <div className="flex">
         <img className="w-72 h-96" src="static\Tf5WHMUo.jpeg" />
         <div className="flex items-center bg-white w-80">

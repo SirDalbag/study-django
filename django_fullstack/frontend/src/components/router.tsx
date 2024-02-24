@@ -4,6 +4,7 @@ import Audio from "../pages/audio";
 import Comics from "../pages/comics";
 import Kids from "../pages/kids";
 import MyBooks from "../pages/my-books";
+import Book from "../pages/book";
 import Search from "../pages/search";
 
 export default function Router() {
@@ -15,7 +16,8 @@ export default function Router() {
         <Route path={"/audio"} element={<Audio />}></Route>
         <Route path={"/comics"} element={<Comics />}></Route>
         <Route path={"/kids"} element={<Kids />}></Route>
-        <Route path={"/my-books"} element={<MyBooks />}></Route>
+        <Route path={"/my-books"} element={<MyBooks />}></Route>\
+        <Route path={"/book/:id"} element={<Book />}></Route>
         <Route path={"/search"} element={<Search />}></Route>
       </Routes>
     </BrowserRouter>
