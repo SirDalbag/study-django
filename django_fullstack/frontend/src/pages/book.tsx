@@ -1,15 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import * as bases from "../components/bases";
-import Categories from "../components/categories";
-
-const categories = [
-  { id: 1, name: "ХУДОЖЕСТВЕННАЯ ЛИТЕРАТУРА", slug: "/books/fiction" },
-  {
-    id: 2,
-    name: "МИФОЛОГИЯ И ФОЛЬКЛОР",
-    slug: "/books/mythology-and-folklore",
-  },
-];
+import { useBook } from "../components/hooks";
 
 const navigation = [
   { id: 1, name: "О книге", slug: "/book/1" },
@@ -23,18 +14,23 @@ function isActive(slug: string, path: string): boolean {
 
 export default function Page() {
   const location = useLocation();
+  const { id } = useParams();
+  const book: any = useBook(id);
   return (
     <bases.Base>
       <div className="container mx-auto px-32 py-12">
         <div className="flex gap-8">
-          <img className="w-80 h-full" src="../static/Tf5WHMUo.jpeg" />
+          <img
+            className="w-80 h-full"
+            src={`http://127.0.0.1:8000${book?.cover_image}`}
+          />
           <div className="flex flex-col gap-2">
-            <Link to="">
-              <p className="text-lg underline tracking-wide hover:text-blue-600">
-                Иллюстрации Антейку
-              </p>
-            </Link>
-            <p className="font-semibold text-3xl">Русские народные сказки</p>
+            <p className="text-lg underline tracking-wide">
+              <Link to="" className="hover:text-blue-600">
+                {book?.author}
+              </Link>
+            </p>
+            <p className="font-semibold text-3xl">{book?.title}</p>
             <Link to="" className="pt-6">
               <button className="bg-blue-600 rounded-md hover:bg-blue-700 transform transition-transform duration-100 active:scale-95">
                 <div className="flex items-center gap-2 py-2 px-6">
@@ -82,13 +78,7 @@ export default function Page() {
                 </li>
               ))}
             </ul>
-            <p className="text-lg pt-6 pb-6">
-              Сборник русских народных сказок, записанных Афанасьевым. Необычная
-              интерпретация образов любимых героинь — Марьи Моревны, Василисы
-              Прекрасной, Бабы-яги — с привязкой к архетипам. Атмосферные
-              иллюстрации Антейку.
-            </p>
-            <Categories content={categories} />
+            <p className="text-lg pt-6 pb-6">{book?.description}</p>
           </div>
         </div>
       </div>

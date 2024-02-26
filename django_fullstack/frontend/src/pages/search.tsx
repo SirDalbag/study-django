@@ -1,31 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import * as bases from "../components/bases";
+import { useBooks, useCategories } from "../components/hooks";
 import Categories from "../components/categories";
 
-const categories = [
-  { id: 1, name: "САМОРАЗВИТИЕ", slug: "/books/self-development" },
-  { id: 2, name: "ФАНТАСТИКА", slug: "/books/fiction" },
-  { id: 3, name: "РОМАНТИКА", slug: "/books/romance" },
-  { id: 4, name: "ПСИХОЛОГИЯ", slug: "/books/psychology" },
-  { id: 5, name: "ДЕТЕКТИВЫ", slug: "/books/detectives" },
-  { id: 6, name: "ПРОЗА", slug: "/books/prose" },
-  { id: 7, name: "ТРИЛЛЕРЫ И ХОРРОРЫ", slug: "/books/thrillers-and-horror" },
-  { id: 8, name: "ФЭНТЕЗИ", slug: "/books/fantasy" },
-  { id: 9, name: "НОН-ФИКШН", slug: "/books/non-fiction" },
-  { id: 10, name: "КЛАССИКА", slug: "/books/classic" },
-  { id: 11, name: "YOUNG ADULT", slug: "/books/young-adult" },
-  { id: 12, name: "БИЗНЕС", slug: "/books/business" },
-  { id: 13, name: "ИСТОРИЯ", slug: "/books/history" },
-  { id: 14, name: "ЗДОРОВЬЕ", slug: "/books/health" },
-  {
-    id: 15,
-    name: "БИОГРАФИИ И МЕМУАРЫ",
-    slug: "/books/biographies-and-memoirs",
-  },
-];
-
 export default function Page() {
+  const categories = useCategories();
+
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
