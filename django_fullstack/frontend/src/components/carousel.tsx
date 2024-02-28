@@ -64,6 +64,10 @@ const Carousel = ({ content }: { content: any }) => {
     prevArrow: <PrevArrow />,
   };
 
+  if (content === null) {
+    return null;
+  }
+
   const elements = content.map((item: any) => (
     <div key={item.id}>
       <Link to={`/book/${item.id}`}>

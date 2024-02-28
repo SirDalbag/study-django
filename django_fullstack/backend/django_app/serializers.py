@@ -8,6 +8,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Tag
+        fields = "__all__"
+
+
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book

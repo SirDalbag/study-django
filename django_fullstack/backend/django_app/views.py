@@ -5,14 +5,8 @@ from django.db.models import QuerySet
 from django_app import models, serializers
 
 
-def serialization(
-    model: models, serializer: serializers, id: int = None, slug: dict = {}
-):
-    objects = model.objects.all() if not id else model.objects.get(id=id)
-    if slug.get("category"):
-        objects = objects.filter(categories__slug=slug["category"])
-    elif slug.get("tag"):
-        objects = objects.filter(tags__slug=slug["tag"])
+def serialization(model, serializer, **kwargs):
+    objects = model.objects.filter(**kwargs) if kwargs else model.objects.all()
     return serializer(
         objects,
         many=isinstance(objects, QuerySet),
@@ -45,8 +39,40 @@ def book(request, id):
         return Response(
             data={
                 "message": serialization(
-                    model=models.Book, serializer=serializers.BookSerializer, id=int(id)
+                    model=models.Book, serializer=serializers.BookSerializer, id=id
                 )
+            }
+        )
+
+
+@api_view(http_method_names=["GET", "POST"])
+@permission_classes([AllowAny])
+def books_category(request, slug):
+    if request.method == "GET":
+        objects = models.Book.objects.filter(categories__slug=slug)
+        return Response(
+            data={
+                "message": serializers.BookSerializer(
+                    objects,
+                    many=isinstance(objects, QuerySet),
+                ).data
+            }
+        )
+
+
+@api_view(http_method_names=["GET", "POST"])
+@permission_classes([AllowAny])
+def book_categories(request):
+    if request.method == "GET":
+        objects = models.Category.objects.filter(
+            id__in=request.query_params.getlist("category", [])
+        )
+        return Response(
+            data={
+                "message": serializers.CategorySerializer(
+                    objects,
+                    many=isinstance(objects, QuerySet),
+                ).data
             }
         )
 
@@ -66,14 +92,20 @@ def categories(request):
 
 @api_view(http_method_names=["GET", "POST"])
 @permission_classes([AllowAny])
-def category(request, slug):
+def category(request, identifier):
     if request.method == "GET":
+        kwargs = {}
+        if identifier.isdigit():
+            kwargs["id"] = identifier
+        else:
+            kwargs["slug"] = identifier
+
         return Response(
             data={
                 "message": serialization(
-                    model=models.Book,
-                    serializer=serializers.BookSerializer,
-                    slug={"category": slug},
+                    model=models.Category,
+                    serializer=serializers.CategorySerializer,
+                    **kwargs
                 )
             }
         )
@@ -81,14 +113,31 @@ def category(request, slug):
 
 @api_view(http_method_names=["GET", "POST"])
 @permission_classes([AllowAny])
-def tag(request, slug):
+def tags(request):
     if request.method == "GET":
         return Response(
             data={
                 "message": serialization(
-                    model=models.Book,
-                    serializer=serializers.BookSerializer,
-                    slug={"tag": slug},
+                    model=models.Tag, serializer=serializers.TagSerializer
+                )
+            }
+        )
+
+
+@api_view(http_method_names=["GET", "POST"])
+@permission_classes([AllowAny])
+def tag(request, identifier):
+    if request.method == "GET":
+        kwargs = {}
+        if identifier.isdigit():
+            kwargs["id"] = identifier
+        else:
+            kwargs["slug"] = identifier
+
+        return Response(
+            data={
+                "message": serialization(
+                    model=models.Tag, serializer=serializers.TagSerializer, **kwargs
                 )
             }
         )

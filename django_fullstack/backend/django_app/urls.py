@@ -6,10 +6,13 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("api/", views.api, name="api"),
     path("api/books/", views.books, name="books"),
-    path("api/book/<int:id>/", views.book, name="book"),
+    path("api/book/<id>/", views.book, name="book"),
     path("api/categories/", views.categories, name="categories"),
-    path("api/category/<str:slug>/", views.category, name="category"),
-    path("api/tag/<str:slug>/", views.tag, name="tag"),
+    path("api/category/<identifier>/", views.category, name="category"),
+    path("api/tags/", views.tags, name="tags"),
+    path("api/tag/<identifier>/", views.tag, name="tag"),
+    path("api/books/<slug>/", views.books_category, name="books-category"),
+    path("api/book-categories/", views.book_categories, name="book-categories"),
 ]
 
 if settings.DEBUG:

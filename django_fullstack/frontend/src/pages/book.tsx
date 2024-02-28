@@ -1,12 +1,7 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import * as bases from "../components/bases";
-import { useBook } from "../components/hooks";
-
-const navigation = [
-  { id: 1, name: "О книге", slug: "/book/1" },
-  { id: 2, name: "Впечатления", slug: "/book/reviews/:id" },
-  { id: 3, name: "Похожие книги", slug: "/similar-books" },
-];
+import Categories from "../components/categories";
+import { useBook, useBookCategories } from "../components/hooks";
 
 function isActive(slug: string, path: string): boolean {
   return path === slug ? true : false;
@@ -16,6 +11,14 @@ export default function Page() {
   const location = useLocation();
   const { id } = useParams();
   const book: any = useBook(id);
+  const categories: any = useBookCategories(book?.categories);
+
+  const navigation = [
+    { id: 1, name: "О книге", slug: `/book/${book?.id}` },
+    { id: 2, name: "Впечатления", slug: "/book/reviews/:id" },
+    { id: 3, name: "Похожие книги", slug: "/similar-books" },
+  ];
+
   return (
     <bases.Base>
       <div className="container mx-auto px-32 py-12">
@@ -79,6 +82,7 @@ export default function Page() {
               ))}
             </ul>
             <p className="text-lg pt-6 pb-6">{book?.description}</p>
+            <Categories content={categories} />
           </div>
         </div>
       </div>

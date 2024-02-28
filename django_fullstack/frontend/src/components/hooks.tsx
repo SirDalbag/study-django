@@ -29,8 +29,7 @@ const useBook = (id: string | undefined) => {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/book/${id}/`
         );
-        setBook(response.data.message);
-        console.log(response.data.message);
+        setBook(response.data.message[0]);
       } catch (error) {
         console.error(`Error fetching book with ID ${id}:`, error);
         setBook(null);
@@ -43,6 +42,56 @@ const useBook = (id: string | undefined) => {
   }, [id]);
 
   return book;
+};
+
+const useBookCategories = (ids: any) => {
+  const [bookCategories, setBookCategories] = useState(null);
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/book-categories/?${
+            ids ? ids.map((id: any) => `category=${id}`).join("&") : ""
+          }`
+        );
+        setBookCategories(response.data.message);
+      } catch (error) {
+        console.error(`Error fetching categories with IDS ${ids}:`, error);
+        setBookCategories(null);
+      }
+    };
+
+    if (ids) {
+      fetchBook();
+    }
+  }, [ids]);
+
+  return bookCategories;
+};
+
+const useBooksCategory = (slug: any) => {
+  const [booksCategory, setBooksCategory] = useState(null);
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/books/${slug}/`
+        );
+        setBooksCategory(response.data.message);
+      } catch (error) {
+        console.error(`Error fetching books with slug ${slug}:`, error);
+        setBooksCategory(null);
+      }
+    };
+
+    if (slug) {
+      fetchBook();
+    }
+  }, [slug]);
+
+  return booksCategory;
 };
 
 const useCategories = () => {
@@ -66,4 +115,35 @@ const useCategories = () => {
   return categories;
 };
 
-export { useBooks, useBook, useCategories };
+const useCategory = (identifier: any) => {
+  const [category, setCategory] = useState(null);
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/category/${identifier}/`
+        );
+        setCategory(response.data.message[0]);
+      } catch (error) {
+        console.error(`Error fetching book with ID ${identifier}:`, error);
+        setCategory(null);
+      }
+    };
+
+    if (identifier) {
+      fetchBook();
+    }
+  }, [identifier]);
+
+  return category;
+};
+
+export {
+  useBooks,
+  useBook,
+  useBookCategories,
+  useBooksCategory,
+  useCategories,
+  useCategory,
+};
