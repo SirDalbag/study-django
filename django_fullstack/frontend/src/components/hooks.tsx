@@ -1,24 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as components from "../components/components";
+import * as constants from "../components/constants";
+import * as store from "../components/store";
 import axios from "axios";
 
 const useBooks = () => {
-  const [books, setBooks] = useState([]);
+  const dispatch = useDispatch();
+  const books = useSelector((state: any) => state.bookList);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/books/");
-        setBooks(response.data.message);
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return books;
+    if (!books?.load) {
+      components.constructorWebAction(
+        dispatch,
+        constants.books,
+        `http://127.0.0.1:8000/api/books/`,
+        "GET"
+      );
+    }
+  }, [books?.load, dispatch]);
+  console.log(books?.data);
+  return books?.data;
 };
+
+export default useBooks;
 
 const useBook = (id: string | undefined) => {
   const [book, setBook] = useState(null);

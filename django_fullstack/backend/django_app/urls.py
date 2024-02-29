@@ -2,6 +2,11 @@ from django.urls import path
 from django_app import views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 urlpatterns = [
     path("api/", views.api, name="api"),
@@ -13,6 +18,9 @@ urlpatterns = [
     path("api/tag/<identifier>/", views.tag, name="tag"),
     path("api/books/<slug>/", views.books_category, name="books-category"),
     path("api/book-categories/", views.book_categories, name="book-categories"),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
 ]
 
 if settings.DEBUG:
