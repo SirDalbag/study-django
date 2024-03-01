@@ -1,11 +1,16 @@
 import { useState } from "react";
-import axios from "axios";
+import { useConstructor } from "../components/hooks";
+import * as constants from "../components/constants";
 import * as bases from "../components/bases";
-import { useBooks, useCategories } from "../components/hooks";
 import Categories from "../components/categories";
+import axios from "axios";
 
 export default function Page() {
-  const categories = useCategories();
+  const categories = useConstructor(
+    constants.categories,
+    "categories",
+    `${constants.host}/api/categories/`
+  );
 
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);

@@ -1,7 +1,7 @@
 import { Link, useLocation, useParams } from "react-router-dom";
+import { useConstructor } from "../components/hooks";
+import * as constants from "../components/constants";
 import * as bases from "../components/bases";
-import Categories from "../components/categories";
-import { useBook, useBookCategories } from "../components/hooks";
 
 function isActive(slug: string, path: string): boolean {
   return path === slug ? true : false;
@@ -10,8 +10,12 @@ function isActive(slug: string, path: string): boolean {
 export default function Page() {
   const location = useLocation();
   const { id } = useParams();
-  const book: any = useBook(id);
-  const categories: any = useBookCategories(book?.categories);
+  const book = useConstructor(
+    constants.book,
+    "book",
+    `http://127.0.0.1:8000/api/book/${id}/`,
+    false
+  );
 
   const navigation = [
     { id: 1, name: "О книге", slug: `/book/${book?.id}` },
@@ -82,7 +86,6 @@ export default function Page() {
               ))}
             </ul>
             <p className="text-lg pt-6 pb-6">{book?.description}</p>
-            <Categories content={categories} />
           </div>
         </div>
       </div>

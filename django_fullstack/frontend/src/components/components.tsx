@@ -35,8 +35,7 @@ export async function constructorWebAction(
   url: string,
   method: string = "GET",
   data: any = {},
-  timeout: number = 5000,
-  isExtra: boolean = false
+  timeout: number = 5000
 ) {
   try {
     dispatch({ type: constant.load });
@@ -48,16 +47,12 @@ export async function constructorWebAction(
     };
     const response = await axios(config);
     if (response.status === 200 || response.status === 201) {
-      if (isExtra) {
-        dispatch({ type: constant.success, payload: response.data.message });
-      } else {
-        dispatch({ type: constant.success, payload: response.data.success });
-      }
+      dispatch({ type: constant.success, payload: response.data });
     } else {
       dispatch({ type: constant.error, payload: response.statusText });
     }
   } catch (error: any) {
     console.error(`constructorWebAction: ${url} ${method}`, error);
-    dispatch({ type: constant.fail, payload: "Ошибка!" });
+    dispatch({ type: constant.fail, payload: "Ошибка" });
   }
 }

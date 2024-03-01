@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Spinner from "./spinner";
 
 const Categories = ({
   content,
@@ -7,8 +8,8 @@ const Categories = ({
   content: any;
   className?: string;
 }) => {
-  if (content === null) {
-    return null;
+  if (content === null || content === undefined) {
+    return <Spinner />;
   }
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>

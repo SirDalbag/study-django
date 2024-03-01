@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Spinner from "./spinner";
 
 function NextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -64,8 +65,8 @@ const Carousel = ({ content }: { content: any }) => {
     prevArrow: <PrevArrow />,
   };
 
-  if (content === null) {
-    return null;
+  if (content === null || content === undefined) {
+    return <Spinner />;
   }
 
   const elements = content.map((item: any) => (
