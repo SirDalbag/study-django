@@ -1,9 +1,11 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework import status
 from django.db.models import QuerySet
 from django_app import models, serializers
-import time
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 
 
 def serialization(model, serializer, **kwargs):
@@ -141,4 +143,21 @@ def tag(request, identifier):
                     model=models.Tag, serializer=serializers.TagSerializer, **kwargs
                 )
             }
+        )
+
+
+@api_view(http_method_names=["POST"])
+@permission_classes([AllowAny])
+def register(request) -> Response:
+    print("request.data: ", request.data)
+
+    username = request.data.get("username", None)
+    password = request.data.get("password", None)
+    if username and password:
+        User.objects.create(username=username, password=make_password(password))
+        return Response(data={"success": "Account created"}, status=status.HTTP_200_OK)
+    else:
+        return Response(
+            data={"error": "Invalid login or password"},
+            status=status.HTTP_401_UNAUTHORIZED,
         )

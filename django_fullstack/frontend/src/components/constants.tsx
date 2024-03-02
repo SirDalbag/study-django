@@ -11,3 +11,6 @@ export const booksCategory = constructorConstant("booksCategory");
 
 export const categories = constructorConstant("categories");
 export const category = constructorConstant("category");
+
+export const login = constructorConstant("login");
+export const register = constructorConstant("register");

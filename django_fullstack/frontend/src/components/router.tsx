@@ -7,6 +7,9 @@ import MyBooks from "../pages/my-books";
 import Book from "../pages/book";
 import Category from "../pages/category";
 import Search from "../pages/search";
+import Login from "../pages/login";
+import Register from "../pages/register";
+import Logout from "../pages/logout";
 
 export default function Router() {
   return (
@@ -21,6 +24,9 @@ export default function Router() {
         <Route path={"/book/:id"} element={<Book />}></Route>
         <Route path={"/category/:slug"} element={<Category />}></Route>
         <Route path={"/search"} element={<Search />}></Route>
+        <Route path={"/login"} element={<Login />}></Route>
+        <Route path={"/register"} element={<Register />}></Route>
+        <Route path={"/logout"} element={<Logout />}></Route>
       </Routes>
     </BrowserRouter>
   );

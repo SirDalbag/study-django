@@ -15,6 +15,10 @@ export const store = configureStore({
     categories: components.constructorReducer(constants.categories),
     // @ts-ignore
     category: components.constructorReducer(constants.category),
+    // @ts-ignore
+    login: components.constructorReducer(constants.login),
+    // @ts-ignore
+    register: components.constructorReducer(constants.register),
   },
 });
 export default store;
