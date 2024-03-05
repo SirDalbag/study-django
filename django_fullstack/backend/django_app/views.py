@@ -6,6 +6,8 @@ from django.db.models import QuerySet
 from django_app import models, serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django_app import utils
 
 
 def serialization(model, serializer, **kwargs):
@@ -161,3 +163,46 @@ def register(request) -> Response:
             data={"error": "Invalid login or password"},
             status=status.HTTP_401_UNAUTHORIZED,
         )
+
+
+@api_view(http_method_names=["GET", "POST"])
+def custom_token(request):
+    if request.method == "GET":
+        return Response(data={"message": "OK"})
+    elif request.method == "POST":
+        try:
+            username = request.data["username"]
+            password = request.data["password"]
+            if username and password:  # and utils.check_password(password)
+                user = authenticate(username=username, password=password)
+                if user:
+                    token, created = models.Token.objects.get_or_create(
+                        user=user, defaults={"token": utils.generate_token(password)}
+                    )
+                return Response(
+                    data={"message": {"token": serializers.TokenSerializer(token).data}}
+                )
+            return Response(data={"message": "Invalid username or password"})
+        except Exception as error:
+            return Response(data={"message": str(error)})
+
+
+@api_view(http_method_names=["GET", "POST"])
+def custom_token_verify(request):
+    if request.method == "GET":
+        return Response(data={"message": "OK"})
+    elif request.method == "POST":
+        try:
+            token = request.data["token"]
+            if token:
+                try:
+                    token_obj = models.Token.objects.get(token=token)
+                    if token_obj.is_expired:
+                        return Response({"message": "Token has expired!"})
+                    else:
+                        return Response({"message": "Success!"})
+                except Exception as error:
+                    return Response(data={"message": str(error)})
+            return Response(data={"message": "Token is missing!"})
+        except Exception as error:
+            return Response(data={"message": str(error)})

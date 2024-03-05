@@ -18,3 +18,9 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book
         fields = "__all__"
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Token
+        fields = "__all__"
