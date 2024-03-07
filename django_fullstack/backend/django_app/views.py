@@ -7,7 +7,9 @@ from django_app import models, serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.utils import timezone
 from django_app import utils
+import datetime
 
 
 def serialization(model, serializer, **kwargs):
@@ -18,6 +20,20 @@ def serialization(model, serializer, **kwargs):
     ).data
 
 
+def timeout(func):
+    def wrapper(request, *args, **kwargs):
+        ip = utils.get_ip(request)
+        time = timezone.now() - datetime.timedelta(seconds=1)
+        log = models.Log.objects.create(user=None, ip=ip, date=timezone.now())
+        count = models.Log.objects.filter(ip=ip, date__gt=time).count()
+        if count > 10:
+            raise Exception("Too many attempts!")
+        return func(request, *args, **kwargs)
+
+    return wrapper
+
+
+@timeout
 @api_view(http_method_names=["GET", "POST"])
 @permission_classes([AllowAny])
 def api(request):
@@ -148,11 +164,26 @@ def tag(request, identifier):
         )
 
 
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def _login(request) -> Response:
+    username = request.data.get("username", None)
+    password = request.data.get("password", None)
+    if username and password:
+        user = authenticate(request, username=username, password=password)
+        ip = utils.get_ip(request)
+        time = timezone.now() - datetime.timedelta(minutes=10)
+        count = models.Log.objects.filter(user=user, date__gt=time).count()
+        if count > 10:
+            raise Exception("Too many attempts!")
+        log = models.Log.objects.create(user=user, ip=ip, date=timezone.now())
+        return Response(data={"message": user.username})
+    return Response(data={"message": "Invalid username or password"})
+
+
 @api_view(http_method_names=["POST"])
 @permission_classes([AllowAny])
 def register(request) -> Response:
-    print("request.data: ", request.data)
-
     username = request.data.get("username", None)
     password = request.data.get("password", None)
     if username and password:

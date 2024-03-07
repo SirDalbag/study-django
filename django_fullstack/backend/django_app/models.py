@@ -66,3 +66,20 @@ class Token(models.Model):
     @property
     def is_expired(self):
         return timezone.now() - self.created_at > timezone.timedelta(hours=1)
+
+
+class Log(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=False,
+        db_index=True,
+    )
+    ip = models.CharField(max_length=40, null=False, blank=True, db_index=True)
+    date = models.DateTimeField(
+        default=timezone.now, null=False, blank=True, db_index=True
+    )
+
+    def __str__(self):
+        return f"{self.ip} - {self.date}"
