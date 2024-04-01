@@ -92,3 +92,10 @@ def post_data(request):
     cloth_type = models.Cloth.objects.get(id=request.data.get("clothes"))
     object = models.ClothSet.objects.create(person=person, cloth_type=cloth_type)
     return Response("OK")
+
+
+@api_view(http_method_names=["GET"])
+@permission_classes([AllowAny])
+def get_data(request):
+    object = models.ClothSet.objects.all()
+    return Response(data={"data": serializers.ReportSerializer(object, many=True).data})
