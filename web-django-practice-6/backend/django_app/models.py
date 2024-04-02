@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 # Create your models here.
@@ -69,3 +70,10 @@ class ClothSet(models.Model):
 
     def __str__(self):
         return f"{self.created_at} - {self.person.tabel_num} ({self.person.last_name}) - {self.is_active}"
+
+    @property
+    def get_end_date(self):
+        if self.cloth_type and self.cloth_type.deadline:
+            return self.created_at + datetime.timedelta(days=self.cloth_type.deadline)
+        else:
+            return None

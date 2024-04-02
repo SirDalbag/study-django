@@ -12,4 +12,5 @@ urlpatterns = [
     path("api/clothes/<id>/", views.get_cloth),
     path("api/post/", views.post_data),
     path("api/report/", views.get_data),
+    path("api/warning/", views.get_warning),
 ]

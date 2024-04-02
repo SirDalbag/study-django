@@ -3,7 +3,16 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.shortcuts import render
 from django_app import models, serializers
+from django.utils import timezone
+from django.db.models import (
+    F,
+    ExpressionWrapper,
+    DateTimeField,
+    DurationField,
+    IntegerField,
+)
 import json
+from datetime import timedelta
 
 
 def index(request):
@@ -99,3 +108,31 @@ def post_data(request):
 def get_data(request):
     object = models.ClothSet.objects.all()
     return Response(data={"data": serializers.ReportSerializer(object, many=True).data})
+
+
+@api_view(http_method_names=["GET"])
+@permission_classes([AllowAny])
+def get_warning(request):
+    now = timezone.now() + timedelta(days=3)
+    object = models.ClothSet.objects.all()
+    temp = []
+    for i in object:
+        if i.created_at + timedelta(days=i.cloth_type.deadline) < now:
+            temp.append(i)
+
+    def get_date(created_at, deadline):
+        print(created_at, deadline)
+        return created_at + timedelta(days=1) * deadline
+
+    temp_filter = models.ClothSet.objects.annotate(
+        days=ExpressionWrapper(F("cloth_type__deadline"), output_field=IntegerField()),
+        end_date=F("created_at")
+        + ExpressionWrapper(
+            F("days") * timedelta(days=1), output_field=DurationField()
+        ),
+    ).filter(end_date__lte=now)
+    for i in temp_filter:
+        print(i.end_date, i.days)
+    return Response(
+        data={"data": serializers.ReportSerializer(temp_filter, many=True).data}
+    )
