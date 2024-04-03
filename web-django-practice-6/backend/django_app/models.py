@@ -69,7 +69,7 @@ class ClothSet(models.Model):
         verbose_name_plural = "Выдачи"
 
     def __str__(self):
-        return f"{self.created_at} - {self.person.tabel_num} ({self.person.last_name}) - {self.is_active}"
+        return f"{self.created_at} - {self.person.tabel_num} ({self.person.last_name}) - {self.is_active}, {self.cloth_type.title}"
 
     @property
     def get_end_date(self):

@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from django.db import connection
 from django.shortcuts import render
 from django_app import models, serializers
 from django.utils import timezone
@@ -127,6 +128,69 @@ def get_warning(request):
             F("days") * timedelta(days=1), output_field=DurationField()
         ),
     ).filter(end_date__lte=now)
+    """
+    1) Чистый SQL
+    2) Крутая таблица
+    """
     return Response(
         data={"data": serializers.ReportSerializer(temp_filter, many=True).data}
     )
+
+
+@api_view(http_method_names=["GET"])
+@permission_classes([AllowAny])
+def get(request):
+    persons = models.Person.objects.all()
+    categories = models.ClothCategory.objects.all()
+    data = []
+    for i in persons:
+        clothes = models.ClothSet.objects.filter(person=i.id)
+        data.append(
+            {
+                "Номер": i.tabel_num,
+                "Фамилия": i.last_name,
+                "Имя": i.first_name,
+                **{
+                    x.title: (
+                        [
+                            j.cloth_type.title
+                            for j in clothes
+                            if j.cloth_type.category.id == x.id
+                        ]
+                        if len(
+                            [
+                                j.cloth_type.title
+                                for j in clothes
+                                if j.cloth_type.category.id == x.id
+                            ]
+                        )
+                        != 0
+                        else "-"
+                    )
+                    for x in categories
+                },
+            }
+        )
+    return Response(data)
+
+
+@api_view(http_method_names=["GET"])
+@permission_classes([AllowAny])
+def sql(request):
+    sql = """
+        SELECT * FROM (SELECT p.tabel_num, p.last_name, p.first_name, 
+COALESCE(cl.created_at, '-') AS created_at, 
+COALESCE(c.title, '-') AS cloth,
+COALESCE(cc.title, '-') AS cloth_type,
+COALESCE(c.deadline, 0) AS deadline,
+DATE(cl.created_at, '+' || c.deadline || ' days') AS deadline_date,
+ROUND(julianday(DATE(cl.created_at, '+' || c.deadline || ' days')) - julianday('now')) AS days_remaining
+FROM django_app_person AS p
+LEFT JOIN django_app_clothset AS cl ON cl.person_id =  p.id
+LEFT JOIN django_app_cloth AS c ON cl.cloth_type_id = c.id
+LEFT JOIN django_app_clothcategory AS cc ON c.category_id = cc.id)
+    """
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    return Response(data)

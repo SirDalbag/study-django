@@ -106,7 +106,7 @@ function App() {
         </li>
       ))}
     </ul>
-    <ul className="pt-4">
+    <ul className="pt-4 border-2 border-red-600">
       {warning.map((warning, index) => (
         <li key={index} className="py-2">
           <div className="grid grid-cols-4 gap-3 border-2 p-2">

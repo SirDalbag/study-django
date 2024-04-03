@@ -13,4 +13,6 @@ urlpatterns = [
     path("api/post/", views.post_data),
     path("api/report/", views.get_data),
     path("api/warning/", views.get_warning),
+    path("api/get/", views.get),
+    path("api/sql/", views.sql),
 ]
