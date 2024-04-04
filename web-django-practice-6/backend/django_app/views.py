@@ -179,16 +179,16 @@ def get(request):
 def sql(request):
     sql = """
         SELECT * FROM (SELECT p.tabel_num, p.last_name, p.first_name, 
-COALESCE(cl.created_at, '-') AS created_at, 
-COALESCE(c.title, '-') AS cloth,
-COALESCE(cc.title, '-') AS cloth_type,
-COALESCE(c.deadline, 0) AS deadline,
-DATE(cl.created_at, '+' || c.deadline || ' days') AS deadline_date,
-ROUND(julianday(DATE(cl.created_at, '+' || c.deadline || ' days')) - julianday('now')) AS days_remaining
-FROM django_app_person AS p
-LEFT JOIN django_app_clothset AS cl ON cl.person_id =  p.id
-LEFT JOIN django_app_cloth AS c ON cl.cloth_type_id = c.id
-LEFT JOIN django_app_clothcategory AS cc ON c.category_id = cc.id)
+        COALESCE(cl.created_at, '-') AS created_at, 
+        COALESCE(cc.title, '-') AS cloth_type,
+        COALESCE(c.title, '-') AS cloth,
+        COALESCE(c.deadline, 0) AS deadline,
+        COALESCE(DATE(cl.created_at, '+' || c.deadline || ' days'), '-') AS deadline_date,
+        COALESCE(ROUND(julianday(DATE(cl.created_at, '+' || c.deadline || ' days')) - julianday('now')), 0) AS days_remaining
+        FROM django_app_person AS p
+        LEFT JOIN django_app_clothset AS cl ON cl.person_id =  p.id
+        LEFT JOIN django_app_cloth AS c ON cl.cloth_type_id = c.id
+        LEFT JOIN django_app_clothcategory AS cc ON c.category_id = cc.id)
     """
     cursor = connection.cursor()
     cursor.execute(sql)
