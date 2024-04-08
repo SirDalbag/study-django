@@ -25,6 +25,36 @@ BEGIN
 END;
 $$;
 
+CREATE PROCEDURE edit_user(
+    user_id_param INT,
+    first_name_param VARCHAR(100),
+    last_name_param VARCHAR(100),
+    age_param INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE users
+    SET 
+        first_name = first_name_param,
+        last_name = last_name_param,
+        age = age_param
+    WHERE
+        user_id = user_id_param;
+END;
+$$;
+
+CREATE PROCEDURE delete_user(
+    user_id_param INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM users
+    WHERE user_id = user_id_param;
+END;
+$$;
+
 CREATE PROCEDURE new_log(
     user_id_param INT, 
     user_action_param VARCHAR(50)
@@ -36,6 +66,7 @@ BEGIN
     VALUES (user_id_param, user_action_param);
 END;
 $$;
+
 
 CREATE FUNCTION get_full_name(user_id_param INT)
 RETURNS VARCHAR(200)

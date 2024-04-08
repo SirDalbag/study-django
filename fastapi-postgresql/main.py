@@ -41,10 +41,28 @@ async def get_user(user_id: int):
     )
 
 
-@app.post("/api/user/")
+@app.post("/api/user/add/")
 async def post_user(user: User):
     return await execute(
         query="CALL new_user($1, $2, $3)",
         method="POST",
         args=(user.first_name, user.last_name, user.age),
+    )
+
+
+@app.put("/api/user/edit/{user_id}")
+async def edit_user(user_id: int, user: User):
+    return await execute(
+        query="CALL edit_user($1, $2, $3, $4)",
+        method="PUT",
+        args=(user_id, user.first_name, user.last_name, user.age),
+    )
+
+
+@app.delete("/api/user/delete/{user_id}")
+async def delete_user(user_id: int):
+    return await execute(
+        query="CALL delete_user($1)",
+        method="DELETE",
+        args=(user_id,),
     )
