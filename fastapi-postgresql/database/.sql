@@ -95,3 +95,16 @@ CREATE TRIGGER user_action_trigger
 AFTER INSERT OR UPDATE OR DELETE ON users
 FOR EACH ROW 
 EXECUTE FUNCTION log_trigger_function();
+
+DO $$
+DECLARE
+    user_record RECORD;
+BEGIN
+    FOR user_record IN SELECT first_name, last_name FROM users LOOP
+        RAISE NOTICE 'Full Name: %', user_record.first_name || ' ' || user_record.last_name;
+    END LOOP;
+END $$;
+
+SELECT id, username FROM users
+UNION
+SELECT user_id, action FROM logs;
