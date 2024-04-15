@@ -9,7 +9,7 @@ function App() {
   const [deletingUser, setDeletingUser] = useState(null);
 
   async function getUsers() {
-    const response = await axios.get("http://127.0.0.1:8000/api/users/");
+    const response = await axios.get("http://127.0.0.1:8000/api/users");
     setUsers(response.data.data);
   }
 
@@ -62,7 +62,7 @@ function App() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/user/delete/${deletingUser.user_id}`);
+      await axios.delete(`http://127.0.0.1:8000/api/users/${deletingUser.user_id}`);
       getUsers();
       closeModal();
     } catch (error) {
@@ -79,9 +79,9 @@ function App() {
     event.preventDefault();
     try {
       if (editingUser) {
-        await axios.put(`http://127.0.0.1:8000/api/user/edit/${editingUser.user_id}`, formData);
+        await axios.put(`http://127.0.0.1:8000/api/users/${editingUser.user_id}`, formData);
       } else {
-        await axios.post('http://127.0.0.1:8000/api/user/add/', formData);
+        await axios.post('http://127.0.0.1:8000/api/users', formData);
       }
       getUsers();
       closeModal();

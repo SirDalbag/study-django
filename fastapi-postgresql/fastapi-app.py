@@ -25,7 +25,7 @@ class User(BaseModel):
     age: int
 
 
-@app.get("/api/users/")
+@app.get("/api/users")
 async def get_users():
     return await execute(
         query="SELECT user_id, first_name, last_name, age FROM users", method="GET"
@@ -41,7 +41,7 @@ async def get_user(user_id: int):
     )
 
 
-@app.post("/api/user/add/")
+@app.post("/api/users")
 async def post_user(user: User):
     return await execute(
         query="CALL new_user($1, $2, $3)",
@@ -50,7 +50,7 @@ async def post_user(user: User):
     )
 
 
-@app.put("/api/user/edit/{user_id}")
+@app.put("/api/users/{user_id}")
 async def edit_user(user_id: int, user: User):
     return await execute(
         query="CALL edit_user($1, $2, $3, $4)",
@@ -59,7 +59,7 @@ async def edit_user(user_id: int, user: User):
     )
 
 
-@app.delete("/api/user/delete/{user_id}")
+@app.delete("/api/users/{user_id}")
 async def delete_user(user_id: int):
     return await execute(
         query="CALL delete_user($1)",
