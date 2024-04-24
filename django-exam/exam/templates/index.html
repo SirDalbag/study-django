@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load django_app_filters_and_tags %}
+{% block main %}
+<h1>Новый пост:</h1>
+<form method="post" action="{% url 'post' %}">
+    {% csrf_token %}
+    <input id="text" name="text" type="text" placeholder="Текст">
+    <button type="submit">Отправить</button>
+</form>
+{% with posts_headline="Посты:" comments_headline="Комментарии:" %}
+<h1>{{ posts_headline }}</h1>
+<hr>
+{% for post in posts %}
+<h2>{{ post.text|lower|short }} | {{ post.creation_date }}</h2>
+<h3>{{ comments_headline }}</h3>
+<form method="post" action="{% url 'comment' post.id %}">
+    {% csrf_token %}
+    <input id="text" name="text" type="text" placeholder="Текст">
+    <button type="submit">Отправить комментарий</button>
+</form>
+{% get_comments post.id as comments %}
+{% for comment in comments %}
+{{ comment.text }}
+{% endfor %}
+<hr>
+{% endfor %}
+{% endwith %}
+{% endblock main %}
