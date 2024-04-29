@@ -1,0 +1,20 @@
+<ul class="pagination d-flex justify-content-center">
+    <li class="page-item">
+        <a class="page-link fw-medium text-danger border-danger {% if not page_obj.has_previous %} disabled {% endif %}"
+            href="{% if page_obj.has_previous %} ?page={{ page_obj.previous_page_number }} {% else %} ?page={{ page_obj.paginator.num_pages }} {% endif %}">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </li>
+    {% for page_num in page_obj.paginator.page_range %}
+    <li class="page-item"><a
+            class="page-link fw-medium text-danger border-danger {% if page_num == page_obj.number %} bg-danger text-white {% endif %}"
+            href="?page={{ page_num }}">{{ page_num }}</a>
+    </li>
+    {% endfor %}
+    <li class="page-item">
+        <a class="page-link fw-medium text-danger border-danger {% if not page_obj.has_next %} disabled {% endif %}"
+            href="{% if page_obj.has_next %} ?page={{ page_obj.next_page_number }} {% else %} ?page={{ page_obj.paginator.num_pages }} {% endif %}">
+            <span aria-hidden=" true">&raquo;</span>
+        </a>
+    </li>
+</ul>

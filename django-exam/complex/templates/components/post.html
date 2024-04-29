@@ -1,0 +1,10 @@
+<div class="card border-2 border-top-0 border-danger">
+    <div class="card-header bg-danger text-white fw-semibold">
+        {{ post.user.username }} • {{ post.created_at }}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.text }}</p>
+        <a href="{% url 'post' post.id %}" class="btn btn-danger fw-medium">Read More</a>
+    </div>
+</div>

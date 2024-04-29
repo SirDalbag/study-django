@@ -1,0 +1,38 @@
+{% extends "components/base.html" %}
+{% block main %}
+<div class="container d-flex flex-column gap-4">
+    <div class="border-2 border-bottom border-danger pb-4">
+        <div class="card border-2 border-top-0 border-danger">
+            <div class="card-header bg-danger text-white fw-semibold">
+                {{ post.user.username }} • {{ post.created_at }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.text }}</p>
+            </div>
+        </div>
+        <form method="POST" action="{% url 'comment' post.id %}" class="mt-4">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <span class="input-group-text border-2 border-danger bg-danger text-white fw-medium"
+                    id="input">Comment</span>
+                <input id="comment" name="comment" type="text" class="form-control border-2 border-danger"
+                    aria-describedby="input">
+            </div>
+        </form>
+    </div>
+    {% include "components/pagination.html" %}
+    <div class="list-group gap-4">
+        {% for comment in page_obj %}
+        <div class="list-group-item border-2 border-danger">
+            <p class="mb-1 fw-medium">{{ comment.text }}</p>
+            <small class="text-body-secondary">{{ comment.user.username }} • {{ comment.created_at }}</small>
+        </div>
+        {% empty %}
+        <div class="alert bg-danger text-center text-white fw-medium">
+            No comments have been added yet!
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock main %}

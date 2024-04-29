@@ -1,0 +1,29 @@
+{% extends "components/base.html" %}
+{% block main %}
+<div class="container">
+    <form method="POST" action="{% url 'home' %}" class="mt-4 border-2 border-bottom border-danger pb-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input name="title" type="text" class="form-control border-2 border-danger" id="title"
+                placeholder="Post title">
+        </div>
+        <div class="mb-3">
+            <textarea class="form-control border-2 border-danger" id="text" name="text" rows="3"
+                placeholder="Post text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger mb-3 fw-semibold w-100">Enter</button>
+    </form>
+    <div class="d-flex flex-column gap-4 mt-4">
+        {% for post in page_obj %}
+        {% include "components/post.html" %}
+        {% empty %}
+        <div class="alert bg-danger text-center text-white fw-medium">
+            No posts have been added yet!
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mt-4">
+        {% include "components/pagination.html" %}
+    </div>
+</div>
+{% endblock main %}
